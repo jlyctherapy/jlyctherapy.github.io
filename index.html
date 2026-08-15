@@ -322,6 +322,24 @@
   .form-msg.error{background:var(--clay-tint); border-color:var(--clay); color:var(--clay-dark);}
   .form-msg.error ul{margin:6px 0 0; padding-left:20px;}
   .form-msg.error li{margin:2px 0;}
+  #formFields.hidden{display:none;}
+  .form-msg.success-full{
+    text-align:center; padding:48px 36px; background:var(--paper); border:1px solid var(--line);
+    box-shadow:var(--shadow); border-radius:var(--radius);
+  }
+  .form-msg.success-full .icon-badge{
+    width:64px; height:64px; margin:0 auto 20px; border-radius:63% 37% 42% 58% / 55% 42% 58% 45%;
+    background:linear-gradient(150deg, var(--mint-soft) 0%, var(--clay-tint) 130%); color:var(--mint-dark);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .form-msg.success-full .icon-badge svg{width:28px; height:28px;}
+  .form-msg.success-full h3{font-family:'Playfair Display', serif; font-size:1.35rem; color:var(--forest-dark); margin:0 0 10px;}
+  .form-msg.success-full p{margin:0 0 22px; font-size:.95rem; line-height:1.65;}
+  .form-msg.success-full .send-another{
+    background:none; border:none; padding:0; font:inherit; font-weight:700; color:var(--mint-dark);
+    text-decoration:underline; cursor:pointer;
+  }
+  .form-msg.success-full .send-another:hover{color:var(--forest-dark);}
   .contact-form button[disabled]{opacity:.65; cursor:not-allowed;}
   .hp-field{position:absolute; left:-5000px; width:1px; height:1px; overflow:hidden;}
   .field.invalid input, .field.invalid select, .field.invalid textarea{
@@ -788,6 +806,7 @@
 
         <div>
           <form class="contact-form" id="contactForm" novalidate>
+          <div id="formFields">
             <!-- Honeypot: hidden from real visitors, often auto-filled by spam bots. Left blank = OK. -->
             <div class="hp-field" aria-hidden="true">
               <label for="company">Leave this field blank</label>
@@ -836,6 +855,7 @@
             </label>
             <span class="field-error" id="err-consent">Please confirm you consent to us holding your details before sending.</span>
             <button type="submit" class="btn btn-primary" id="submitBtn" style="justify-self:start;">Send enquiry</button>
+          </div>
             <div class="form-msg" id="formMsg" role="alert" aria-live="polite"></div>
           </form>
         </div>
@@ -934,7 +954,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // ===== Contact form: sends to a Cloudflare Worker, which relays to Brevo =====
   // Replace this with your deployed Worker's URL once it's live (see SETUP.md).
-  var CONTACT_ENDPOINT = "https://contact-form.jlyctherapy.workers.dev";
+  var CONTACT_ENDPOINT = "https://REPLACE-WITH-YOUR-WORKER-URL.workers.dev";
 
   var form = document.getElementById('contactForm');
   var renderedAtField = document.getElementById('renderedAt');
@@ -943,6 +963,7 @@ document.addEventListener('DOMContentLoaded', function(){
   if(form){
     var submitBtn = document.getElementById('submitBtn');
     var msgEl = document.getElementById('formMsg');
+    var formFieldsEl = document.getElementById('formFields');
 
     // Every required field, how to tell if it's filled in properly, and where its
     // wrapper + inline error message live. The consent checkbox has no ".field"
@@ -979,12 +1000,39 @@ document.addEventListener('DOMContentLoaded', function(){
     function showFormMessage(html, isError){
       msgEl.innerHTML = html;
       msgEl.classList.add('show');
+      msgEl.classList.remove('success-full');
       msgEl.classList.toggle('error', !!isError);
     }
 
     function hideFormMessage(){
-      msgEl.classList.remove('show', 'error');
+      msgEl.classList.remove('show', 'error', 'success-full');
       msgEl.innerHTML = '';
+    }
+
+    // On a successful send, replace the form entirely with a confirmation —
+    // there's nothing left for the visitor to do, so showing the (now stale,
+    // still-filled-in) fields alongside a small "sent" note is just clutter.
+    function showSuccess(){
+      formFieldsEl.classList.add('hidden');
+      msgEl.classList.remove('error');
+      msgEl.classList.add('show', 'success-full');
+      msgEl.innerHTML =
+        '<div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 7"/></svg></div>' +
+        '<h3>Thank you — your message is on its way</h3>' +
+        '<p>I aim to reply within two working days. If it’s urgent, please see the crisis line details below.</p>' +
+        '<button type="button" class="send-another" id="sendAnotherBtn">Send another enquiry</button>';
+
+      var sendAnotherBtn = document.getElementById('sendAnotherBtn');
+      if(sendAnotherBtn){
+        sendAnotherBtn.addEventListener('click', function(){
+          form.reset();
+          FIELDS.forEach(function(field){ setFieldState(field, true); });
+          if(renderedAtField){ renderedAtField.value = Date.now(); }
+          hideFormMessage();
+          formFieldsEl.classList.remove('hidden');
+          form.name.focus();
+        });
+      }
     }
 
     // Runs our own styled validation instead of the browser's native pop-up bubbles,
@@ -1055,9 +1103,7 @@ document.addEventListener('DOMContentLoaded', function(){
           }
           return;
         }
-        showFormMessage("Thank you — your message has been sent. I aim to reply within two working days.", false);
-        form.reset();
-        FIELDS.forEach(function(field){ setFieldState(field, true); });
+        showSuccess();
       })
       .catch(function(){
         showFormMessage("Sorry, something went wrong sending your message. Please try again, or email jen@jlyctherapy.com directly.", true);
