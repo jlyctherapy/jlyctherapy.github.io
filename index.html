@@ -304,6 +304,8 @@
   .info-row svg{width:22px; height:22px; color:var(--clay); flex-shrink:0; margin-top:2px;}
   .info-row strong{display:block; color:var(--forest-dark); font-size:.92rem;}
   .info-row span{color:var(--ink-soft); font-size:.92rem;}
+  .info-row a{color:var(--mint-dark); font-size:.92rem; font-weight:700; text-decoration:underline; text-underline-offset:2px;}
+  .info-row a:hover{color:var(--forest-dark);}
 
   form.contact-form{display:grid; gap:18px;}
   .form-row{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
@@ -322,6 +324,7 @@
   .form-msg.error{background:var(--clay-tint); border-color:var(--clay); color:var(--clay-dark);}
   .form-msg.error ul{margin:6px 0 0; padding-left:20px;}
   .form-msg.error li{margin:2px 0;}
+  .form-msg.error a{color:inherit; font-weight:700; text-decoration:underline;}
   #formFields.hidden{display:none;}
   .form-msg.success-full{
     text-align:center; padding:48px 36px; background:var(--paper); border:1px solid var(--line);
@@ -783,7 +786,7 @@
           <div class="info-card">
             <div class="info-row">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
-              <div><strong>Email</strong><span>jen@jlyctherapy.com</span></div>
+              <div><strong>Email</strong><a href="mailto:jen@jlyctherapy.com">jen@jlyctherapy.com</a></div>
             </div>
             <div class="info-row">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h3l1.5 5-2 1.5a12 12 0 0 0 6 6l1.5-2 5 1.5v3c0 1.1-.9 2-2 2C10.5 21 3 13.5 3 5c0-1.1.9-2 2-2Z"/></svg>
@@ -902,7 +905,7 @@
       <div>
         <h4>Get in touch</h4>
         <ul>
-          <li>jen@jlyctherapy.com</li>
+          <li><a href="mailto:jen@jlyctherapy.com">jen@jlyctherapy.com</a></li>
           <li>01234 567 890</li>
           <li>Online across the UK &amp; in-person by arrangement</li>
         </ul>
@@ -1099,14 +1102,14 @@ document.addEventListener('DOMContentLoaded', function(){
             var items = result.body.fields.map(function(f){ return '<li>' + (fieldLabels[f] || f) + '</li>'; }).join('');
             showFormMessage('<strong>Please check the following before sending:</strong><ul>' + items + '</ul>', true);
           } else {
-            showFormMessage("Sorry, something went wrong sending your message. Please try again, or email jen@jlyctherapy.com directly.", true);
+            showFormMessage('Sorry, something went wrong sending your message. Please try again, or email <a href="mailto:jen@jlyctherapy.com">jen@jlyctherapy.com</a> directly.', true);
           }
           return;
         }
         showSuccess();
       })
       .catch(function(){
-        showFormMessage("Sorry, something went wrong sending your message. Please try again, or email jen@jlyctherapy.com directly.", true);
+        showFormMessage('Sorry, something went wrong sending your message. Please try again, or email <a href="mailto:jen@jlyctherapy.com">jen@jlyctherapy.com</a> directly.', true);
       })
       .finally(function(){
         submitBtn.disabled = false;
