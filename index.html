@@ -296,7 +296,13 @@
 
   /* Contact page */
   .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px;}
-  @media (max-width:880px){.contact-grid{grid-template-columns:1fr;}}
+  @media (max-width:880px){
+    .contact-grid{grid-template-columns:1fr;}
+    /* On mobile, lead with the form — it's the primary way people get in touch,
+       and shouldn't need scrolling past the info card to reach. */
+    .contact-form-col{order:1;}
+    .contact-info-col{order:2;}
+  }
   .info-card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:28px;}
   .info-card + .info-card{margin-top:20px;}
   .info-row{display:flex; gap:14px; align-items:flex-start; margin-bottom:16px;}
@@ -782,7 +788,7 @@
     <div class="container">
       <div class="contact-grid">
 
-        <div>
+        <div class="contact-info-col">
           <div class="info-card">
             <div class="info-row">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
@@ -807,7 +813,7 @@
           </div>
         </div>
 
-        <div>
+        <div class="contact-form-col">
           <form class="contact-form" id="contactForm" novalidate>
           <div id="formFields">
             <!-- Honeypot: hidden from real visitors, often auto-filled by spam bots. Left blank = OK. -->
