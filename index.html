@@ -33,7 +33,7 @@
     --radius: 22px;
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; overflow-x:hidden;}
   body{
     margin:0;
     font-family:'Muli', sans-serif;
@@ -41,6 +41,8 @@
     background:var(--cream);
     line-height:1.65;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    max-width:100%;
   }
   h1,h2,h3,h4{
     font-family:'Playfair Display', serif;
@@ -116,20 +118,30 @@
   nav.primary button.navlink.active{color:var(--forest-dark); background:var(--mint-soft);}
   .nav-cta{display:flex; align-items:center; gap:10px;}
   .menu-toggle{display:none; background:none; border:none; cursor:pointer; padding:8px;}
-  .menu-toggle span{display:block; width:24px; height:2px; background:var(--forest-dark); margin:5px 0; border-radius:2px;}
+  .menu-toggle span{display:block; width:24px; height:2px; background:var(--forest-dark); margin:5px 0; border-radius:2px; transition:transform .2s ease, opacity .2s ease;}
   nav.primary .mobile-cta{display:none;}
 
   @media (max-width: 880px){
     nav.primary{
-      position:fixed; inset:64px 0 0 0; background:var(--cream); flex-direction:column; align-items:stretch;
+      /* --nav-top is set by JS to the header's actual rendered bottom edge — the
+         header's height varies (logo image, prototype banner wrapping onto two
+         lines on narrow phones, etc.), so a hardcoded pixel guess here previously
+         left the panel starting too high and hiding the logo row behind it. The
+         64px is only a fallback for the instant before JS runs. */
+      position:fixed; top:var(--nav-top, 64px); right:0; bottom:0; left:0;
+      background:var(--cream); flex-direction:column; align-items:stretch;
       padding:18px 24px; gap:2px; transform:translateY(-8px); opacity:0; pointer-events:none; transition:.2s ease;
-      border-top:1px solid var(--line);
+      border-top:1px solid var(--line); overflow-y:auto; -webkit-overflow-scrolling:touch;
     }
     nav.primary.open{opacity:1; transform:translateY(0); pointer-events:auto;}
     nav.primary button.navlink{text-align:left; padding:14px 10px; font-size:1.05rem; border-bottom:1px solid var(--line); border-radius:0;}
     .nav-cta .btn-primary{display:none;}
     nav.primary .mobile-cta{display:block; margin-top:10px;}
     .menu-toggle{display:block;}
+    /* Hamburger -> X while the menu is open, so it's clear tapping it again closes it. */
+    nav.primary.open ~ .nav-cta .menu-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    nav.primary.open ~ .nav-cta .menu-toggle span:nth-child(2){opacity:0;}
+    nav.primary.open ~ .nav-cta .menu-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
   }
 
   /* Sections */
@@ -350,7 +362,15 @@
   }
   .form-msg.success-full .send-another:hover{color:var(--forest-dark);}
   .contact-form button[disabled]{opacity:.65; cursor:not-allowed;}
-  .hp-field{position:absolute; left:-5000px; width:1px; height:1px; overflow:hidden;}
+  /* Visually hidden without an off-screen negative offset — some mobile browsers
+     still count a far-off-canvas absolutely-positioned box (e.g. left:-5000px)
+     toward the page's horizontal scrollable area even though it's clipped from
+     view, which caused a stray horizontal scroll on mobile. Clipping it to a 1x1
+     box in place avoids that while staying just as invisible/unreachable. */
+  .hp-field{
+    position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+    overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0;
+  }
   .field.invalid input, .field.invalid select, .field.invalid textarea{
     border-color:var(--clay); box-shadow:0 0 0 3px rgba(150,115,60,.14);
   }
@@ -388,7 +408,7 @@
     </nav>
     <div class="nav-cta">
       <button class="btn btn-primary" data-nav="contact">Book a free consultation</button>
-      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
@@ -939,12 +959,53 @@ document.addEventListener('DOMContentLoaded', function(){
   var navLinks = document.querySelectorAll('.navlink');
   var menuToggle = document.getElementById('menuToggle');
   var primaryNav = document.getElementById('primaryNav');
+  var siteHeader = document.querySelector('header.site');
+
+  // The mobile menu panel should start exactly where the header ends — measured
+  // live rather than hardcoded, since the header's height varies (the prototype
+  // banner can wrap to two lines on narrow phones, fonts load in, etc).
+  function updateMobileNavOffset(){
+    if(siteHeader){
+      document.documentElement.style.setProperty('--nav-top', siteHeader.getBoundingClientRect().bottom + 'px');
+    }
+  }
+  updateMobileNavOffset();
+  window.addEventListener('resize', updateMobileNavOffset);
+  window.addEventListener('load', updateMobileNavOffset);
+
+  // While the mobile menu is open, the page behind it is locked in place (instead
+  // of just relying on the header's sticky positioning) — otherwise scrolling the
+  // background page could carry the header, and the close/X control with it, out
+  // of view, leaving no obvious way to close the menu without scrolling back up.
+  var menuScrollY = 0;
+  function lockBackgroundScroll(){
+    menuScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = (-menuScrollY) + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockBackgroundScroll(){
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+  }
 
   function showPage(id){
+    if(primaryNav.classList.contains('open')){
+      // Closing the menu because the visitor tapped a nav link, not the X — leave
+      // the scroll-position restore to the scrollTo(top:0) below instead of
+      // snapping back to wherever they were when they opened the menu.
+      primaryNav.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      unlockBackgroundScroll();
+    }
     pages.forEach(function(p){ p.classList.toggle('active', p.id === 'page-' + id); });
     navLinks.forEach(function(l){ l.classList.toggle('active', l.getAttribute('data-nav') === id); });
     window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
-    primaryNav.classList.remove('open');
     history.replaceState(null, '', '#' + id);
   }
 
@@ -955,7 +1016,22 @@ document.addEventListener('DOMContentLoaded', function(){
     btn.addEventListener('click', function(){ showPage(btn.getAttribute('data-nav')); });
   });
 
-  menuToggle.addEventListener('click', function(){ primaryNav.classList.toggle('open'); });
+  menuToggle.addEventListener('click', function(){
+    var opening = !primaryNav.classList.contains('open');
+    primaryNav.classList.toggle('open', opening);
+    menuToggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    if(opening){
+      updateMobileNavOffset();
+      lockBackgroundScroll();
+    } else {
+      // Closed via the toggle itself (not a nav tap) — put the visitor back
+      // exactly where they were rather than jumping to the top of the page.
+      // Instant, not the site's usual smooth scroll — this is restoring state,
+      // not a navigation the visitor should watch happen.
+      unlockBackgroundScroll();
+      window.scrollTo({top: menuScrollY, behavior: 'instant' in window ? 'instant' : 'auto'});
+    }
+  });
 
   var startId = (location.hash || '#home').replace('#','');
   if(!document.getElementById('page-' + startId)){ startId = 'home'; }
@@ -1021,7 +1097,13 @@ document.addEventListener('DOMContentLoaded', function(){
     // On a successful send, replace the form entirely with a confirmation —
     // there's nothing left for the visitor to do, so showing the (now stale,
     // still-filled-in) fields alongside a small "sent" note is just clutter.
+    // The fields are cleared straight away (not just hidden) so the name, email,
+    // phone and message that were just sent don't linger in the page's memory —
+    // e.g. on a shared device, or if someone comes back to this tab later.
     function showSuccess(){
+      form.reset();
+      FIELDS.forEach(function(field){ setFieldState(field, true); });
+      if(renderedAtField){ renderedAtField.value = Date.now(); }
       formFieldsEl.classList.add('hidden');
       msgEl.classList.remove('error');
       msgEl.classList.add('show', 'success-full');
@@ -1034,9 +1116,6 @@ document.addEventListener('DOMContentLoaded', function(){
       var sendAnotherBtn = document.getElementById('sendAnotherBtn');
       if(sendAnotherBtn){
         sendAnotherBtn.addEventListener('click', function(){
-          form.reset();
-          FIELDS.forEach(function(field){ setFieldState(field, true); });
-          if(renderedAtField){ renderedAtField.value = Date.now(); }
           hideFormMessage();
           formFieldsEl.classList.remove('hidden');
           form.name.focus();
