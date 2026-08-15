@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JLYC Therapy | Psychotherapy &amp; Counselling</title>
 <meta name="description" content="JLYC Therapy — a calm, creative space to grow. Person-centred psychotherapy for young people (10+) and adults, rooted in nature, art and peace.">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Muli:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -79,6 +81,20 @@
   .btn-ghost:hover{background:var(--forest-dark); color:var(--cream);}
   .btn-ghost.on-dark{color:var(--cream); border-color:rgba(251,249,244,.55);}
   .btn-ghost.on-dark:hover{background:var(--cream); color:var(--forest-dark);}
+
+  /* Prototype / coming-soon notice */
+  .preview-bar{
+    background:var(--forest-dark); color:var(--cream);
+    font-family:'Muli',sans-serif; font-size:.82rem; line-height:1.5;
+    text-align:center; padding:10px 20px;
+  }
+  .preview-bar-inner{max-width:1120px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;}
+  .preview-bar .tag{
+    display:inline-block; background:var(--tan); color:var(--tan-text); font-weight:800;
+    font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; padding:3px 10px; border-radius:999px;
+  }
+  .preview-bar strong{color:#fff;}
+  .preview-bar span.msg{color:rgba(251,249,244,.88);}
 
   /* Header */
   header.site{
@@ -310,6 +326,13 @@
 </style>
 </head>
 <body>
+
+<div class="preview-bar" role="note">
+  <div class="preview-bar-inner">
+    <span class="tag">Coming soon</span>
+    <span class="msg"><strong>Prototype content</strong> — for illustration only. This site is not yet live; text, images and pricing shown here will change before launch.</span>
+  </div>
+</div>
 
 <header class="site">
   <div class="nav-wrap">
