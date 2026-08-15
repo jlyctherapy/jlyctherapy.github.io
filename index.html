@@ -300,6 +300,22 @@
   table.fees th{font-family:'Playfair Display',serif; font-weight:500; background:var(--forest-tint); color:var(--forest-dark); font-size:1rem;}
   table.fees td.price{font-weight:700; color:var(--forest-dark); white-space:nowrap;}
   table.fees tr:last-child td{border-bottom:none;}
+
+  /* Below 600px the three columns (session name, length, fee) no longer fit
+     without wrapping or clipping the longer session names — "Individual
+     therapy — young people (10–17)" and "Concession places (limited
+     availability)" were being cut off on iPhone-width screens. Below that
+     width, each row becomes a small stacked card instead of a table row. */
+  @media (max-width:600px){
+    table.fees, table.fees thead, table.fees tbody, table.fees tr, table.fees th, table.fees td{display:block;}
+    table.fees thead{display:none;}
+    table.fees tr{padding:16px 20px; border-bottom:1px solid var(--line);}
+    table.fees td{padding:2px 0; border:none; white-space:normal;}
+    table.fees td:first-child{font-family:'Playfair Display',serif; font-weight:700; color:var(--forest-dark); font-size:1.02rem; margin-bottom:6px;}
+    table.fees td[data-label]{display:flex; justify-content:space-between; gap:12px; text-align:left !important;}
+    table.fees td[data-label]::before{content:attr(data-label); color:var(--ink-soft); font-weight:400;}
+    table.fees td.price{font-size:.98rem;}
+  }
   .fee-note{font-size:.85rem; color:var(--ink-soft);}
   .faq{border-top:1px solid var(--line);}
   .faq-item{border-bottom:1px solid var(--line); padding:20px 0;}
@@ -734,11 +750,11 @@
           <tr><th>Session</th><th>Length</th><th style="text-align:right;">Fee</th></tr>
         </thead>
         <tbody>
-          <tr><td>Free introductory call</td><td>15 minutes</td><td class="price" style="text-align:right;">Free</td></tr>
-          <tr><td>Individual therapy — adults</td><td>50 minutes</td><td class="price" style="text-align:right;">£60</td></tr>
-          <tr><td>Individual therapy — young people (10&ndash;17)</td><td>50 minutes</td><td class="price" style="text-align:right;">£50</td></tr>
-          <tr><td>Parent/carer consultation</td><td>30 minutes</td><td class="price" style="text-align:right;">£30</td></tr>
-          <tr><td>Concession places (limited availability)</td><td>50 minutes</td><td class="price" style="text-align:right;">from £35</td></tr>
+          <tr><td>Free introductory call</td><td data-label="Length">15 minutes</td><td class="price" data-label="Fee" style="text-align:right;">Free</td></tr>
+          <tr><td>Individual therapy — adults</td><td data-label="Length">50 minutes</td><td class="price" data-label="Fee" style="text-align:right;">£60</td></tr>
+          <tr><td>Individual therapy — young people (10&ndash;17)</td><td data-label="Length">50 minutes</td><td class="price" data-label="Fee" style="text-align:right;">£50</td></tr>
+          <tr><td>Parent/carer consultation</td><td data-label="Length">30 minutes</td><td class="price" data-label="Fee" style="text-align:right;">£30</td></tr>
+          <tr><td>Concession places (limited availability)</td><td data-label="Length">50 minutes</td><td class="price" data-label="Fee" style="text-align:right;">from £35</td></tr>
         </tbody>
       </table>
       </div>
