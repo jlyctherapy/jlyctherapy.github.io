@@ -117,6 +117,17 @@
   nav.primary button.navlink:hover{color:var(--forest-dark); background:var(--forest-tint);}
   nav.primary button.navlink.active{color:var(--forest-dark); background:var(--mint-soft);}
   .nav-cta{display:flex; align-items:center; gap:10px;}
+  /* Every practice site worth copying puts a phone number in the header. A
+     person in distress should not have to hunt for it behind a nav link. */
+  .nav-phone{
+    display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+    font-family:'Muli',sans-serif; font-weight:700; font-size:.9rem; color:var(--forest-dark);
+    padding:9px 14px; border-radius:8px; border:1.5px solid var(--line); transition:.15s ease;
+  }
+  .nav-phone svg{width:15px; height:15px; color:var(--clay);}
+  .nav-phone:hover{border-color:var(--mint-dark); background:var(--mint-soft);}
+  @media (max-width:980px){.nav-phone span{display:none;}}
+  @media (max-width:880px){.nav-phone{display:none;}}
   .menu-toggle{display:none; background:none; border:none; cursor:pointer; padding:8px;}
   .menu-toggle span{display:block; width:24px; height:2px; background:var(--forest-dark); margin:5px 0; border-radius:2px; transition:transform .2s ease, opacity .2s ease;}
   nav.primary .mobile-cta{display:none;}
@@ -149,30 +160,52 @@
   section.page.active{display:block; animation:fade .4s ease;}
   @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
 
+
+  /* ---- Handmade surface ----------------------------------------------------
+     Two things separate a drawn design from a generated one: paper has grain,
+     and hand-drawn lines wobble. A flat, perfectly smooth surface with clean
+     vector strokes is the look every template ships with. The grain below sits
+     over the whole page at very low opacity; the #ink filter (defined in the
+     markup) pushes the decorative line art off true so it reads as pen work. */
+  body::after{
+    content:""; position:fixed; inset:0; z-index:9999; pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    background-size:180px 180px; opacity:.055; mix-blend-mode:multiply;
+  }
+  .ink{filter:url(#ink);}
+
+  /* Photographs, framed like something physically pinned up rather than a
+     full-bleed CSS gradient. Every practice site worth copying leads with a
+     real photograph; this is the slot for one. */
+  .photo-frame{
+    background:var(--paper); padding:14px 14px 16px; border:1px solid var(--line);
+    box-shadow:0 10px 30px rgba(30,78,66,.13); border-radius:3px;
+    transform:rotate(-1.6deg); position:relative;
+  }
+  .photo-frame .photo-inner{
+    aspect-ratio:4/5; background:var(--mint-soft); overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .photo-frame .photo-inner svg{width:86%; height:86%; color:var(--forest-dark);}
+  .photo-frame img{width:100%; height:100%; object-fit:cover; display:block;}
+  .photo-note{
+    font-size:.75rem; color:var(--ink-soft); line-height:1.5; margin:18px 0 0;
+    padding-left:12px; border-left:2px solid var(--tan); transform:rotate(.4deg);
+  }
+
   .hero{
     position:relative; padding:76px 0 90px; overflow:hidden;
     background:
-      radial-gradient(circle at 85% 12%, var(--mint-soft) 0%, transparent 45%),
-      radial-gradient(circle at 8% 90%, var(--clay-tint) 0%, transparent 40%);
+      linear-gradient(180deg, var(--cream) 0%, var(--cream) 62%, var(--clay-tint) 100%);
+    border-bottom:1px solid var(--line);
   }
   .hero-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; align-items:center;}
   @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}}
   .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-top:28px;}
-  .hero-art{
-    position:relative; aspect-ratio:1/1;
-    background: linear-gradient(155deg, #A9DBD7 0%, var(--mint) 55%, #7FC4BF 100%);
-    border-radius:38% 62% 63% 37% / 41% 44% 56% 59%;
-    display:flex; align-items:center; justify-content:center; overflow:visible; box-shadow:var(--shadow);
-  }
-  .hero-art svg{width:66%; height:66%; position:relative; z-index:1;}
-  .hero-art::before{
-    content:""; position:absolute; left:-26px; bottom:-22px; width:46%; height:46%;
-    background:var(--clay-tint); border-radius:63% 37% 42% 58% / 55% 42% 58% 45%; z-index:0; opacity:.8;
-  }
-  .hero-art::after{
-    content:""; position:absolute; right:-16px; top:-18px; width:26%; height:26%;
-    background:var(--forest-tint); border-radius:50%; z-index:0;
-  }
+  /* Line art sits directly on the page now. The gradient blob it replaced is
+     the single most recognisable "AI wellness site" object there is. */
+  .sketch{display:flex; align-items:center; justify-content:center; padding:10px;}
+  .sketch svg{width:84%; height:auto; max-width:340px; transform:rotate(2deg);}
   .trust-strip{border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--paper);}
   .trust-row{display:flex; flex-wrap:wrap; gap:28px; justify-content:center; align-items:center; padding:26px 0; text-align:center;}
   .trust-item{display:flex; align-items:center; gap:10px; font-size:.88rem; font-weight:600; color:var(--ink-soft);}
@@ -191,6 +224,23 @@
   .grid-2{display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center;}
   @media (max-width:900px){.grid-3{grid-template-columns:1fr 1fr;} .grid-4{grid-template-columns:1fr 1fr;} .grid-2{grid-template-columns:1fr;}}
   @media (max-width:600px){.grid-3{grid-template-columns:1fr;} .grid-4{grid-template-columns:1fr;}}
+
+
+  /* Four identical drop-shadowed boxes in a row is the default component of
+     every site builder on earth. Same content as an indented list with hairline
+     rules reads as something a person laid out. */
+  .offer-list{display:grid; grid-template-columns:1fr 1fr; gap:0 56px; border-top:1px solid var(--line);}
+  .offer{display:flex; gap:18px; padding:26px 0; border-bottom:1px solid var(--line);}
+  .offer-mark{flex-shrink:0; width:34px; height:34px; color:var(--clay); margin-top:2px;}
+  .offer-mark svg{width:100%; height:100%;}
+  .offer:nth-child(2) .offer-mark{transform:rotate(-5deg);}
+  .offer:nth-child(3) .offer-mark{transform:rotate(4deg);}
+  .offer:nth-child(4) .offer-mark{transform:rotate(-3deg);}
+  .offer h3{font-size:1.08rem; margin-bottom:6px;}
+  .offer p{color:var(--ink-soft); font-size:.95rem; margin:0;}
+  @media (max-width:760px){
+    .offer-list{grid-template-columns:1fr; gap:0;}
+  }
 
   .card{
     background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
@@ -212,16 +262,13 @@
   .card p + p{margin-top:.9em;} /* stacked paragraphs in a card had no gap at all */
 
   .article-card{background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; display:flex; flex-direction:column;}
-  .article-thumb{aspect-ratio:16/10; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;}
-  .article-thumb::before{
-    content:""; position:absolute; width:75%; height:75%; left:-15%; bottom:-25%;
-    background:rgba(255,255,255,.35); border-radius:63% 37% 42% 58% / 55% 42% 58% 45%;
-  }
-  .article-thumb::after{
-    content:""; position:absolute; width:40%; height:40%; right:-8%; top:-12%;
-    background:rgba(255,255,255,.3); border-radius:50%;
-  }
-  .article-thumb svg{width:34%; height:34%; position:relative; z-index:1;}
+  /* Flat tinted paper with a drawn mark on it, instead of the stacked
+     translucent blobs that were here before. */
+  .article-thumb{aspect-ratio:16/10; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+    border-bottom:1px solid var(--line);}
+  .article-thumb svg{width:38%; height:38%; position:relative; z-index:1;}
+  .article-card:nth-child(2) .article-thumb svg{transform:rotate(-6deg);}
+  .article-card:nth-child(3) .article-thumb svg{transform:rotate(5deg);}
   .article-body{padding:24px 24px 26px;}
   .article-tag{display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--mint-dark); background:var(--mint-soft); padding:5px 11px; border-radius:999px; margin-bottom:12px;}
   .article-card h3{font-size:1.1rem; margin-bottom:8px;}
@@ -230,7 +277,7 @@
   .article-read svg{width:15px; height:15px;}
 
   .quote-block{
-    background: linear-gradient(160deg, var(--mint-soft) 0%, var(--clay-tint) 100%);
+    background: var(--forest-tint);
     color:var(--forest-dark); border-radius:18px; padding:60px 56px; text-align:center;
     position:relative; overflow:hidden;
   }
@@ -252,8 +299,7 @@
   }
 
   .cta-banner{
-    background:var(--clay-tint); border-radius:28px; padding:56px; text-align:center;
-    background-image: radial-gradient(circle at 90% 20%, rgba(255,255,255,.5), transparent 40%);
+    background:var(--clay-tint); border-radius:14px; padding:56px; text-align:center;
   }
 
   footer.site{background:var(--tan); color:var(--tan-text); padding-top:60px;}
@@ -291,6 +337,8 @@
 
   /* About page */
   .portrait-figure{margin:0;}
+  .portrait-frame{transform:rotate(1.3deg);}
+  .portrait-frame .photo-inner svg{width:100%; height:100%;}
   .portrait{
     aspect-ratio:4/5; border-radius:10px; background:var(--mint-soft); overflow:hidden;
     display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow); overflow:hidden;
@@ -431,6 +479,14 @@
 </style>
 </head>
 <body>
+<!-- Roughening filter used on the decorative line art, so the strokes read as
+     drawn by hand rather than plotted. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <filter id="ink" x="-12%" y="-12%" width="124%" height="124%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="3" seed="9" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.2" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
 
 <div class="preview-bar" role="note">
   <div class="preview-bar-inner">
@@ -453,6 +509,7 @@
       <div class="mobile-cta"><button class="btn btn-primary" data-nav="contact" style="width:100%;">Book a free consultation</button></div>
     </nav>
     <div class="nav-cta">
+      <a class="nav-phone" href="tel:+441234567890"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h3l1.5 5-2 1.5a12 12 0 0 0 6 6l1.5-2 5 1.5v3c0 1.1-.9 2-2 2C10.5 21 3 13.5 3 5c0-1.1.9-2 2-2Z"/></svg>01234 567 890</a>
       <button class="btn btn-primary" data-nav="contact">Book a free consultation</button>
       <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
@@ -479,8 +536,10 @@
           <span class="badge">Online &amp; in-person</span>
         </div>
       </div>
-      <div class="hero-art" aria-hidden="true">
-        <svg viewBox="0 0 200 200" fill="none" stroke="#123830" stroke-width="2.2" stroke-linecap="round">
+      <figure class="hero-photo" style="margin:0;">
+        <div class="photo-frame">
+          <div class="photo-inner">
+            <svg class="ink" viewBox="0 0 200 200" fill="none" stroke="#123830" stroke-width="2.2" stroke-linecap="round">
           <path d="M100 178c0-14 0-28 0-40" stroke="#123830" stroke-width="4"/>
           <path d="M100 138c-30-4-46-24-52-52 26 6 42 20 52 44"/>
           <path d="M100 138c30-4 46-24 52-52-26 6-42 20-52 44"/>
@@ -491,7 +550,10 @@
           <circle cx="46" cy="70" r="2.4" fill="#C17B5B" stroke="none"/>
           <circle cx="154" cy="66" r="2.4" fill="#C17B5B" stroke="none"/>
         </svg>
-      </div>
+          </div>
+        </div>
+        <p class="photo-note">Placeholder drawing. Replace this with a photograph of yourself &mdash; ideally somewhere outdoors, looking at the camera. It is the first thing a visitor looks for.</p>
+      </figure>
     </div>
   </div>
 
@@ -510,26 +572,34 @@
         <h2>What I can help with</h2>
         <p class="lede">These are the things people bring to me most often. Your sessions won't look quite like anyone else's.</p>
       </div>
-      <div class="grid-4">
-        <div class="card">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.3"/><path d="M15 20c.2-2.6 1.9-4.6 4-5"/></svg></div>
-          <h3>Young people (10+)</h3>
-          <p>Teenagers come to me about anxiety, school, friendships, and feelings that have got too big to carry around. Parents are kept in the loop, with the young person's agreement.</p>
+      <div class="offer-list">
+        <div class="offer">
+          <span class="offer-mark" aria-hidden="true"><svg class="ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.3"/><path d="M15 20c.2-2.6 1.9-4.6 4-5"/></svg></span>
+          <div>
+            <h3>Young people (10+)</h3>
+            <p>Teenagers come to me about anxiety, school, friendships, and feelings that have got too big to carry around. Parents are kept in the loop, with the young person's agreement.</p>
+          </div>
         </div>
-        <div class="card">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c8-1 14-7 15-15-8 1-14 7-15 15Z"/><path d="M6 18c3-4 6-7 12-12"/></svg></div>
-          <h3>Nature-informed therapy</h3>
-          <p>Some people think better while walking. Outdoor sessions can be arranged locally, and when the weather doesn't play along we bring the same grounding work indoors.</p>
+        <div class="offer">
+          <span class="offer-mark" aria-hidden="true"><svg class="ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c8-1 14-7 15-15-8 1-14 7-15 15Z"/><path d="M6 18c3-4 6-7 12-12"/></svg></span>
+          <div>
+            <h3>Nature-informed therapy</h3>
+            <p>Some people think better while walking. Outdoor sessions can be arranged locally, and when the weather doesn't play along we bring the same grounding work indoors.</p>
+          </div>
         </div>
-        <div class="card">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 10.5-10.5a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"/><path d="M14 6.5l3 3"/></svg></div>
-          <h3>Creative &amp; art-based work</h3>
-          <p>When talking is hard, drawing or making something can carry what words can't. You don't need to be any good at it.</p>
+        <div class="offer">
+          <span class="offer-mark" aria-hidden="true"><svg class="ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 10.5-10.5a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"/><path d="M14 6.5l3 3"/></svg></span>
+          <div>
+            <h3>Creative &amp; art-based work</h3>
+            <p>When talking is hard, drawing or making something can carry what words can't. You don't need to be any good at it.</p>
+          </div>
         </div>
-        <div class="card">
-          <div class="icon-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg></div>
-          <h3>Anxiety, stress &amp; life transitions</h3>
-          <p>Adults come to me during a divorce, a bereavement, burnout, or a stretch of low mood that hasn't lifted on its own.</p>
+        <div class="offer">
+          <span class="offer-mark" aria-hidden="true"><svg class="ink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg></span>
+          <div>
+            <h3>Anxiety, stress &amp; life transitions</h3>
+            <p>Adults come to me during a divorce, a bereavement, burnout, or a stretch of low mood that hasn't lifted on its own.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -543,12 +613,18 @@
         <p>You might be fifteen and fed up. You might be a parent who isn't sure whether they're overreacting. Either way, nothing here is rushed, and you won't be judged for what you bring.</p>
         <button class="btn btn-ghost" data-nav="about">More about my approach</button>
       </div>
-      <div class="hero-art" style="aspect-ratio:1/1; background:var(--mint-soft);">
-        <svg viewBox="0 0 200 200" fill="none" stroke="#1E4E42" stroke-width="1.6" stroke-linecap="round">
-          <circle cx="100" cy="100" r="70" stroke="#9FD3C7" stroke-width="2"/>
-          <path d="M100 60c-16 8-24 22-24 40s10 30 24 38c14-8 24-20 24-38s-8-32-24-40Z"/>
-          <path d="M100 60v78"/>
-          <path d="M76 100c8-4 16-4 24 2M124 100c-8-4-16-4-24 2"/>
+      <div class="sketch" aria-hidden="true">
+        <svg class="ink" viewBox="0 0 240 240" fill="none" stroke="#1E4E42" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M118 224c-6-44-4-88 6-128" stroke-width="2.8"/>
+          <path d="M124 150c-26-6-40-24-44-50 24 4 38 18 44 42" stroke-width="1.9"/>
+          <path d="M124 142c24-10 34-30 32-56-22 8-32 24-34 48" stroke-width="1.9"/>
+          <path d="M120 186c-22-4-34-18-38-40 20 4 32 16 38 34" stroke-width="1.6"/>
+          <path d="M122 178c20-8 28-24 27-46-18 7-26 20-28 40" stroke-width="1.6"/>
+          <path d="M112 96c2-16 10-28 22-34" stroke-width="1.5"/>
+          <path d="M134 62c-7-3-14-1-19 5 6 5 13 5 19-5Z" stroke-width="1.5"/>
+          <circle cx="72" cy="86" r="2.6" fill="#96733C" stroke="none"/>
+          <circle cx="170" cy="72" r="2.2" fill="#96733C" stroke="none"/>
+          <circle cx="158" cy="128" r="1.8" fill="#96733C" stroke="none"/>
         </svg>
       </div>
     </div>
@@ -596,7 +672,7 @@
       <div class="grid-3">
         <article class="article-card">
           <div class="article-thumb" style="background:var(--mint-soft);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#123830" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c8-1 14-7 15-15-8 1-14 7-15 15Z"/><path d="M6 18c3-4 6-7 12-12"/></svg>
+            <svg class="ink" viewBox="0 0 24 24" fill="none" stroke="#123830" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c8-1 14-7 15-15-8 1-14 7-15 15Z"/><path d="M6 18c3-4 6-7 12-12"/></svg>
           </div>
           <div class="article-body">
             <span class="article-tag">Nature</span>
@@ -607,7 +683,7 @@
         </article>
         <article class="article-card">
           <div class="article-thumb" style="background:var(--clay-tint);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#123830" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 10.5-10.5a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"/><path d="M14 6.5l3 3"/></svg>
+            <svg class="ink" viewBox="0 0 24 24" fill="none" stroke="#123830" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 10.5-10.5a2.1 2.1 0 0 0-3-3L5 16l-1 4Z"/><path d="M14 6.5l3 3"/></svg>
           </div>
           <div class="article-body">
             <span class="article-tag">Art</span>
@@ -618,7 +694,7 @@
         </article>
         <article class="article-card">
           <div class="article-thumb" style="background:var(--forest-tint);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#123830" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
+            <svg class="ink" viewBox="0 0 24 24" fill="none" stroke="#123830" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>
           </div>
           <div class="article-body">
             <span class="article-tag">Peace</span>
@@ -658,8 +734,9 @@
   <div class="section">
     <div class="container grid-2">
       <figure class="portrait-figure">
-      <div class="portrait" aria-hidden="true">
-        <svg viewBox="0 0 320 400" width="100%" height="100%" preserveAspectRatio="xMidYMax slice">
+        <div class="photo-frame portrait-frame">
+          <div class="photo-inner">
+            <svg class="ink" viewBox="0 0 320 400" width="100%" height="100%" preserveAspectRatio="xMidYMax slice">
           <defs>
             <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#EAF6F3"/>
@@ -677,8 +754,9 @@
           <path d="M40 320c0-20 10-34 10-34s10 14 10 34-5 22-10 22-10-2-10-22Z" fill="#3C7C74" opacity=".8"/>
           <rect x="47" y="340" width="6" height="14" fill="#3C7C74" opacity=".8"/>
         </svg>
-      </div>
-      <figcaption>Placeholder illustration. Replace with a real photograph of yourself &mdash; on a practice site it is the thing visitors look for first.</figcaption>
+          </div>
+        </div>
+        <p class="photo-note">Placeholder illustration. Replace with a real photograph of yourself &mdash; on a practice site it is the thing visitors look for first.</p>
       </figure>
       <div>
         <h2>Why I became a therapist</h2>
@@ -741,7 +819,7 @@
 
   <div class="section alt">
     <div class="container">
-      <div class="cta-banner" style="background: linear-gradient(155deg, var(--mint-soft) 0%, var(--paper) 100%);">
+      <div class="cta-banner">
         <h2>Still deciding?</h2>
         <p class="lede center">A free call is the quickest way to find out whether this is worth pursuing.</p>
         <div class="hero-actions" style="justify-content:center;">
