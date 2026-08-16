@@ -371,6 +371,29 @@
   .creds-list li{display:flex; gap:12px; align-items:flex-start; font-size:.96rem; color:var(--ink-soft);}
   .creds-list svg{width:20px; height:20px; color:var(--clay); flex-shrink:0; margin-top:3px;}
 
+
+  /* Legal / policy pages — the one place on this site where a plain, fairly
+     formal document layout is actually correct: visitors expect a privacy
+     policy to look like a document, not a marketing page. */
+  .legal{max-width:74ch;}
+  .legal h2{font-size:1.4rem; margin-top:2.2em;}
+  .legal h2:first-child{margin-top:0;}
+  .legal h3{font-size:1.05rem; margin-top:1.7em; color:var(--forest-dark);}
+  .legal p{color:var(--ink-soft);}
+  .legal ul{margin:0 0 1em; padding-left:1.3em; color:var(--ink-soft);}
+  .legal li{margin-bottom:.5em;}
+  .legal a{color:var(--mint-dark); text-decoration:underline;}
+  .legal a:hover{color:var(--forest-dark);}
+  .legal .legal-meta{
+    font-size:.85rem; color:var(--ink-soft); background:var(--forest-tint);
+    border-radius:10px; padding:14px 18px; margin-bottom:2.4em;
+  }
+  .text-link{
+    background:none; border:none; padding:0; margin:0; font:inherit; cursor:pointer;
+    color:inherit; text-decoration:underline; text-underline-offset:2px;
+  }
+  .text-link:hover{color:var(--forest-dark);}
+
   /* Fees page */
   .fees-wrap{border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);}
   table.fees{width:100%; border-collapse:collapse; background:var(--paper);}
@@ -993,7 +1016,7 @@
             </div>
             <label class="consent" id="consentLabel">
               <input type="checkbox" id="consent" name="consent" required aria-describedby="err-consent">
-              <span>I consent to JLYC Therapy holding my details in order to respond to this enquiry, in line with the <a href="#" style="text-decoration:underline;">privacy policy</a>. (Placeholder — link your real policy here.)</span>
+              <span>I consent to JLYC Therapy holding my details in order to respond to this enquiry, in line with the <button type="button" class="text-link" data-nav="privacy">privacy policy</button>.</span>
             </label>
             <span class="field-error" id="err-consent">Please confirm you consent to us holding your details before sending.</span>
             <button type="submit" class="btn btn-primary" id="submitBtn" style="justify-self:start;">Send enquiry</button>
@@ -1001,6 +1024,81 @@
             <div class="form-msg" id="formMsg" role="alert" aria-live="polite"></div>
           </form>
         </div>
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============ PRIVACY POLICY ============ -->
+<section id="page-privacy" class="page">
+
+  <div class="page-hero">
+    <div class="container">
+      <h1>Privacy policy</h1>
+      <p class="lede">How JLYC Therapy collects and uses the information you share through this website's contact form.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <div class="legal">
+
+        <p class="legal-meta">This notice covers only the enquiry form on this website. Last updated [Month Year]. If you go on to become a client, you'll be given a separate, more detailed privacy notice covering your clinical records before your first session &mdash; the retention periods for those are longer, and set by professional record-keeping standards rather than by this page.</p>
+
+        <h2>Who we are</h2>
+        <p>[Your full name], trading as JLYC Therapy, is the "data controller" for the information collected through this form &mdash; which means I decide what it's used for and I'm responsible for looking after it.</p>
+        <p>Contact: <a href="mailto:jen@jlyctherapy.com">jen@jlyctherapy.com</a> &middot; [Business address, or "correspondence address available on request" if you work from home] &middot; ICO registration number: [add once registered &mdash; see note at the end of this page].</p>
+
+        <h2>What this form collects</h2>
+        <p>When you submit the contact form, I receive: your name; who the enquiry is for (yourself, a teenager, or someone else); your email address and phone number; whatever you choose to write in the message box; and your consent to me holding that information. The form also records the time it was submitted, which is used only to help tell real enquiries apart from automated spam and isn't personal information about you.</p>
+
+        <h2>Why I collect it, and my lawful basis</h2>
+        <p>I collect this information for one purpose: to read your enquiry, get back to you, and arrange a first conversation if that's what you'd like. I don't use it for marketing, and I don't share it with anyone for their own purposes.</p>
+        <p>My lawful basis for processing your name, email, phone number and message is your <strong>consent</strong> &mdash; given when you tick the consent box before sending the form (Article 6(1)(a) UK GDPR). You can withdraw that consent at any time; see "Your rights", below.</p>
+
+        <h3>A note about health information</h3>
+        <p>Therapy enquiries often touch on mental health, which UK data protection law treats as a "special category" of more sensitive personal data &mdash; even a short message like "I've been struggling with anxiety" falls into this category. Where your message includes anything of this kind, my lawful basis for holding it is your <strong>explicit consent</strong> (Article 9(2)(a) UK GDPR), given in the same way, by ticking the consent box. You're welcome to keep your message as brief or as general as you like; you don't need to explain anything in detail before we've spoken.</p>
+
+        <h2>If you're enquiring on behalf of a young person</h2>
+        <p>If you're a parent or carer enquiring about a young person aged 10&ndash;17, I'll treat the information you provide in the same way as any other enquiry. Once we speak, I'll talk you through how confidentiality works for the young person themselves, and what (if anything) is shared with parents or carers going forward &mdash; this is covered in more detail on the free introductory call, and there are legal exceptions to confidentiality that I'll always explain clearly, for example where there's a safeguarding concern.</p>
+
+        <h2>Who sees your information</h2>
+        <p>Your enquiry reaches my inbox through a small chain of services, each of which only processes it in order to deliver it to me:</p>
+        <ul>
+          <li><strong>Cloudflare</strong> &mdash; runs the small piece of code ("Worker") that receives your form submission and passes it on. Cloudflare doesn't store your enquiry in a database; it relays it and, like most infrastructure providers, keeps short-lived technical logs (such as your IP address) for security and reliability purposes.</li>
+          <li><strong>Brevo</strong> &mdash; the email delivery service that sends your enquiry to me and handles my reply going back to you. Brevo processes the content of the email in order to send it.</li>
+          <li><strong>Google (Gmail)</strong> &mdash; where I read and reply to your enquiry, in an inbox only I have access to.</li>
+        </ul>
+        <p>I don't sell, rent, or share your information with anyone else, and no one uses it for their own marketing. Some of these providers operate internationally, so your information may be processed on servers outside the UK; where that happens, it's protected by the standard safeguards UK data protection law requires (such as the UK's International Data Transfer Addendum or an equivalent approved mechanism), which each provider sets out in their own privacy and data processing terms.</p>
+
+        <h2>How I keep it secure</h2>
+        <p>The form is only ever submitted over an encrypted (HTTPS) connection. There's no database sitting behind this website holding your details &mdash; your enquiry exists as an email in my inbox, which only I can access, protected by my Google account's own security. The form also has basic, automated protection against spam bots, described below.</p>
+
+        <h2>How long I keep it</h2>
+        <p>If your enquiry doesn't lead to us working together, I'll delete the email within 12 months, sooner if you ask me to. If you become a client, the details from your enquiry are folded into your clinical record, which I keep in line with my professional body's (BACP) record-keeping standards and my own retention policy &mdash; I'll explain that separately once you're a client.</p>
+
+        <h2>Your rights</h2>
+        <p>Under UK data protection law, you have the right to:</p>
+        <ul>
+          <li>ask for a copy of the information I hold about you;</li>
+          <li>ask me to correct anything that's inaccurate or incomplete;</li>
+          <li>ask me to delete your information, or restrict how I use it;</li>
+          <li>object to how I'm using it;</li>
+          <li>ask for your information in a portable format, where that applies; and</li>
+          <li>withdraw your consent at any time, which stops any further use of your information for this purpose (it doesn't undo anything already done with your consent up to that point &mdash; for example, an email I've already sent you).</li>
+        </ul>
+        <p>To use any of these rights, email <a href="mailto:jen@jlyctherapy.com">jen@jlyctherapy.com</a>. I'll respond within one month.</p>
+
+        <h2>Automated checks and spam filtering</h2>
+        <p>The form uses a couple of quiet, automated checks &mdash; a hidden field genuine visitors never fill in, and a check that the form wasn't submitted implausibly fast &mdash; to filter out spam bots before they reach my inbox. These checks don't make any decision about you personally, and no legitimate enquiry is ever knowingly blocked by them.</p>
+
+        <h2>Changes to this policy</h2>
+        <p>If I change how this form or its data flow works, I'll update this page and change the date at the top.</p>
+
+        <h2>Complaints</h2>
+        <p>If you're unhappy with how your information has been handled, I'd genuinely like the chance to put it right first &mdash; please email <a href="mailto:jen@jlyctherapy.com">jen@jlyctherapy.com</a>. You also have the right to complain to the UK's data protection regulator, the <a href="https://ico.org.uk/make-a-complaint/" target="_blank" rel="noopener">Information Commissioner's Office (ICO)</a>, at any time.</p>
 
       </div>
     </div>
@@ -1039,6 +1137,7 @@
           <li><button class="footlink" data-nav="about">About Me</button></li>
           <li><button class="footlink" data-nav="fees">Fees</button></li>
           <li><button class="footlink" data-nav="contact">Contact Me</button></li>
+          <li><button class="footlink" data-nav="privacy">Privacy Policy</button></li>
         </ul>
       </div>
       <div>
