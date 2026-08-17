@@ -1061,17 +1061,17 @@
         <h2>Who sees your information</h2>
         <p>Your enquiry reaches my inbox through a small chain of services, each of which only processes it in order to deliver it to me:</p>
         <ul>
-          <li><strong>Cloudflare</strong> &mdash; runs the small piece of code ("Worker") that receives your form submission and passes it on. Cloudflare doesn't store your enquiry in a database; it relays it and, like most infrastructure providers, keeps short-lived technical logs (such as your IP address) for security and reliability purposes.</li>
+          <li><strong>Cloudflare</strong> &mdash; runs the small piece of code ("Worker") that receives your form submission and passes it on. Cloudflare also holds a temporary, encrypted copy of your name, email, phone number and who the enquiry is for, so it can be collected into my client system; this copy never includes your message, is encrypted before it's stored, and is automatically and permanently deleted after at most 72 hours (usually much sooner). Like most infrastructure providers, Cloudflare also keeps short-lived technical logs (such as your IP address) for security and reliability purposes.</li>
           <li><strong>Brevo</strong> &mdash; the email delivery service that sends your enquiry to me and handles my reply going back to you. Brevo processes the content of the email in order to send it.</li>
           <li><strong>Google (Gmail)</strong> &mdash; where I read and reply to your enquiry, in an inbox only I have access to.</li>
         </ul>
         <p>I don't sell, rent, or share your information with anyone else, and no one uses it for their own marketing. Some of these providers operate internationally, so your information may be processed on servers outside the UK; where that happens, it's protected by the standard safeguards UK data protection law requires (such as the UK's International Data Transfer Addendum or an equivalent approved mechanism), which each provider sets out in their own privacy and data processing terms.</p>
 
         <h2>How I keep it secure</h2>
-        <p>The form is only ever submitted over an encrypted (HTTPS) connection. There's no database sitting behind this website holding your details &mdash; your enquiry exists as an email in my inbox, which only I can access, protected by my Google account's own security. The form also has basic, automated protection against spam bots, described below.</p>
+        <p>The form is only ever submitted over an encrypted (HTTPS) connection. Your enquiry exists as an email in my inbox, which only I can access, protected by my Google account's own security. The temporary copy of your contact details held briefly in Cloudflare (see "Who sees your information", above) is encrypted before storage and never includes your message. The form also has basic, automated protection against spam bots, described below.</p>
 
         <h2>How long I keep it</h2>
-        <p>If your enquiry doesn't lead to us working together, I'll delete the email within 12 months, sooner if you ask me to. If you become a client, the details from your enquiry are folded into your clinical record, which I keep in line with my professional body's (BACP) record-keeping standards and my own retention policy &mdash; I'll explain that separately once you're a client.</p>
+        <p>The temporary encrypted copy of your contact details held in Cloudflare is deleted automatically, and permanently, after at most 72 hours &mdash; usually much sooner, since it's collected into my client system within about 15 minutes of you submitting the form. If your enquiry doesn't lead to us working together, I'll delete the email within 12 months, sooner if you ask me to. If you become a client, the details from your enquiry are folded into your clinical record, which I keep in line with my professional body's (BACP) record-keeping standards and my own retention policy &mdash; I'll explain that separately once you're a client.</p>
 
         <h2>Your rights</h2>
         <p>Under UK data protection law, you have the right to:</p>
